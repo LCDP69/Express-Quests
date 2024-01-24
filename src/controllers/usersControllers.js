@@ -60,18 +60,20 @@ const getUsers = (req, res) => {
   let sql = "Select * from users";
   const sqlValues = [];
 
-  if (req.query.language != null) {
+  if (req.query.language != null && !req.query.city) {
     sql += " where language = ?";
     sqlValues.push(req.query.language);
   }
 
-  if (req.query.city != null) {
+  if (req.query.city != null && !req.query.language) {
     sql += " where city = ?";
     sqlValues.push(req.query.city);
   }
-  else if (req.query.city !=null) {
-    sql += " where city = ?";
+
+  if (req.query.city != null && req.query.language != null) {
+    sql += " where city = ? AND language = ?";
     sqlValues.push(req.query.city);
+    sqlValues.push(req.query.language);
   }
 
   database
